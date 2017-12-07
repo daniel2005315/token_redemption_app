@@ -1,0 +1,13 @@
+<%- include header.ejs %>
+
+  <div id=content>
+    <h5>Using Ajax to retrieve data and render page content on client-side</h5>
+
+    <h6>Place holder for testing the item listing URLs</h6>
+    <a href="/ajax/items?page=1&orderBy=1&order=1">Items on page 1, ordered by creation time in increasing order</a><br>
+    <a href="/ajax/items?page=2&orderBy=2&order=-1">Items on page 2, ordered by redeem cost in decreasing order</a><br>
+  </div>
+
+<%- include footer.ejs %>
+
+<script src="/listItems.js"></script>

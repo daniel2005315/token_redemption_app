@@ -1,0 +1,44 @@
+<% // Compute the values needed by this template
+
+  let ascQuery, desQuery; // Query strings for listing items in different orders
+
+  ascQuery = Query.stringify({page:pageData.currentPage, orderBy:1, order:1});
+  desQuery = Query.stringify({page:pageData.currentPage, orderBy:1, order:-1});
+%>
+
+<%- include header.ejs %>
+
+  <div id=content>
+    <h5>Relying on server-side code to re-render the page</h5>
+
+    <a href="?<%=ascQuery%>">Order by Creation Time (Ascending Order)</a><br>
+    <a href="?<%=desQuery%>">Order by Creation Time (Descending Order)</a><br>
+
+    <ul>
+    <% for (let item of pageData.items) {
+        let q = Query.stringify({id: item._id});
+      %>
+        <li>
+          <a href="/item?<%=q%>"><span><%=item.description%></span></a>
+          <span><%=item.createdOn.toLocaleString()%></span>
+        </li>
+    <% } %>
+    </ul>
+
+    <ul>
+    <%
+       let params = JSON.parse(JSON.stringify(pageData.params)); // Clone the params object
+       for (let i = 0; i < pageData.pageCount; i++) {
+         params.page = i+1;
+         let q = Query.stringify(params);
+      %>
+      <a href="?<%=q%>"><button><%=params.page%></button></a>
+      &nbsp;
+    <% } %>
+    </ul>
+
+
+
+  </div>
+
+<%- include footer.ejs %>
