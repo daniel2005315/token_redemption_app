@@ -9,7 +9,7 @@
 <%- include header.ejs %>
 
   <div id=content>
-    <h5>Relying on server-side code to re-render the page</h5>
+    <h5>List of items</h5>
 
     <a href="?<%=ascQuery%>">Order by Creation Time (Ascending Order)</a><br>
     <a href="?<%=desQuery%>">Order by Creation Time (Descending Order)</a><br>
@@ -19,7 +19,11 @@
         let q = Query.stringify({id: item._id});
       %>
         <li>
-          <a href="/item?<%=q%>"><span><%=item.description%></span></a>
+          <a href="/item?<%=q%>"><span><%=item.title%></span></a>
+          <span><%=item.token_value.toLocaleString()%></span>
+          <%#  ********TODO Add img link into database of the item %>
+          <%#  **** Retrieve it as an image href for display       %>
+          <span><%=item.quantity.toLocaleString()%></span>
           <span><%=item.createdOn.toLocaleString()%></span>
         </li>
     <% } %>

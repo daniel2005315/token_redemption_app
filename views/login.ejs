@@ -9,6 +9,7 @@
   // Set default values
   locals.username = locals.username || "";
   locals.loginMsg = locals.loginMsg || "";
+  locals.user = locals.user || null;
 %>
 
 <%- include header.ejs %>
@@ -20,7 +21,7 @@
       <input class="form-control" id="username" name=uname value="<%= username %>"><br>
       <label class="col-form-label" for="password">Password</label>
       <input class="form-control" id="password" type=password name=pword><br>
-      <input class="btn btn-primary" type=submit><br>
+      <input class="btn btn-primary" type=submit value="Submit"><br>
       </div>
     </form>
     <hr>

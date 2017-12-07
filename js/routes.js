@@ -19,11 +19,19 @@ module.exports=app;
 // Use a separate router for ajax request
 app.use('/ajax', require('./ajaxRoutes.js'));
 
+// Middleware to check if user has logged in
+// By adding a "user" parameter too all template's local object
+app.use(function(req, res, next) {
+  res.locals.user = req.session.user;
+  next();
+});
 
+// Serve login page view
 app.get('/login', (req, res) => {
    res.render('login.ejs', { title: 'Login Page' });
 });
 
+//
 app.post('/login', urlencodedParser, async (req, res) => {
   if (model.authenticate(req.body.uname, req.body.pword) === true) {
     // req.session.regenerate() is asynchronous but it does not return a promise.
@@ -31,8 +39,11 @@ app.post('/login', urlencodedParser, async (req, res) => {
     await new Promise((resolve, reject)=> {
       req.session.regenerate(resolve);      // Recreate the session
     });
+
+    // TODO: Add handling to check if the user is normal user or admin user
     req.session.user = req.body.uname;  // To represent successful login
-    res.redirect('/');
+    // Direct users to item list
+    res.redirect('/listItems');
   }
   else {
     req.session.destroy(()=>{});  // Safe asyncrhous call
@@ -50,19 +61,23 @@ app.get('/logout', (req, res) => {
   res.redirect('/login');
 });
 
+
 app.get('/', (req, res) => {
    res.render('index.ejs', { title: 'Main'});
 });
 
+/* Not employing Approach #1
 // Approach #1
 app.get('/listItems', (req, res) => {
   // Simply return the HTMl page.
   // Use client-side JS to retrieve data and render page
   res.render('listItems.ejs', { title: 'Item Listing' });
 });
+*/
 
-// Approach #2: Render the page on server side
-app.get('/listItems2', async (req, res) => {
+// Listing out all the items
+// We use Approach #2: Render the page on server side
+app.get('/listItems', async (req, res) => {
   try {
     // Step 1: Retrieve input data from the request
     let page = req.query.page-0;       // Convert to number
@@ -75,7 +90,8 @@ app.get('/listItems2', async (req, res) => {
     // Step 3: Apply "business logic", and
     // Step 4: Prepare the data needed by the view
     let pageData = await model.getItems(page, orderBy, order);
-
+    console.log(pageData);
+    console.log(Query);
     // Step 5: Render the view
     res.render('listItems2.ejs', { title: 'Item Listing', pageData: pageData, Query: Query });
   } catch (err) {
@@ -97,6 +113,13 @@ app.get('/item', async (req, res) => {
   }
 
 });
+
+app.get('/myitem', async (req, res)=>{
+  // TODO: Get the items where the user has redeemed
+  let data = "To be implemented";
+  res.render('myitem.ejs',{ title: 'My Item', data: data});
+
+})
 
 // CSS files, images, client-side JS files should be in ./public
 app.use(express.static('public'));

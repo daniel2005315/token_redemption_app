@@ -2,18 +2,39 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-let ObjectId = Schema.Types.ObjectId;
+//let ObjectId = Schema.Types.ObjectId;
 
+/*
+username: username,
+password: password,
+balance: balance,
+items: items
+*/
 var UserSchema = Schema({
   username: { type: String, required: true, unique: true },
-  email: { type: String, unique: true, required: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  balance:{type: Number, min:0},
+  items:[ { type: String } ]
 });
 
-
+/*
+  id: id,
+  title: title,
+  description: description,
+  image: image,
+  token_value: token_value,
+  quantity: quantity,
+  createdOn: createdOn,
+  tags: tags
+*/
 var ItemSchema = Schema({
-  owner: { type: ObjectId, ref: 'User' },
+  id: { type: String, required:true, unique:true },
+  title: {type: String, required:true, unique:true},
   description: { type: String, default: '' },
+  // TODO: include image for each item?
+  image:{type: String, default: ''},
+  token_value:{type: Number, min: 1},
+  quantity:{type:Number, min:0},
   createdOn: { type: Date, default: Date.now },
   tags: [ { type: String } ]
 });
