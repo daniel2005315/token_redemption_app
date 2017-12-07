@@ -22,7 +22,13 @@ app.use('/ajax', require('./ajaxRoutes.js'));
 // Middleware to check if user has logged in
 // By adding a "user" parameter too all template's local object
 app.use(function(req, res, next) {
+  if(req.session.user!=null){
+    // Store user info inside session
+    res.locals.userData=req.session.userData;
+
+  }
   res.locals.user = req.session.user;
+
   next();
 });
 
@@ -42,6 +48,9 @@ app.post('/login', urlencodedParser, async (req, res) => {
 
     // TODO: Add handling to check if the user is normal user or admin user
     req.session.user = req.body.uname;  // To represent successful login
+    let userData = await model.getInfo(req.session.user);
+    req.session.userData = userData;
+    console.log(userData);
     // Direct users to item list
     res.redirect('/listItems');
   }

@@ -120,6 +120,14 @@ async function getItem(id) {
   return result;
 }
 
+// Get userInfo (everything)
+async function getInfo(username){
+  let result = await User.
+    findOne({username:username},'balance items').  // only return balance and items
+    exec();
+  return result;
+}
+
 // Place holder for authentication
 function authenticate(username, password) {
   return (username === 'john' && password === '123');
@@ -130,5 +138,6 @@ module.exports = {
   Item: Item,
   authenticate: authenticate,
   getItems: getItems,
-  getItem: getItem
+  getItem: getItem,
+  getInfo: getInfo
 }

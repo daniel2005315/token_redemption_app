@@ -23,12 +23,13 @@
 <%
   // Set default values
   locals.user = locals.user || null;
+  locals.userData = locals.userData || null;
 %>
 
 <body>
   <div id=head>
     <!-- HTML code for header, including navigation bar, goes here -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light ">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
     <a class="navbar-brand" href="#">Icon</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -37,6 +38,8 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
         <% if (user) { %>
+          <li class="nav-item"><a class="nav-link" style="color: white">Hello, <%= user.charAt(0).toUpperCase() + user.slice(1)%></a></li>
+          <li class="nav-item"><a class="nav-link" style="color: white">Your balance is: <%= userData.balance%></a></li>
           <li class="nav-item">
           <a class="nav-link" href="/myitem">My Item</a>
         </li>
