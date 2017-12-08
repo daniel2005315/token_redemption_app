@@ -48,11 +48,15 @@ app.post('/login', urlencodedParser, async (req, res) => {
 
     // TODO: Add handling to check if the user is normal user or admin user
     req.session.user = req.body.uname;  // To represent successful login
+
+    // Get user's info (balance, items)
+    // TODO: may include admin flag here and redirect user's login
     let userData = await model.getInfo(req.session.user);
     req.session.userData = userData;
     console.log(userData);
     // Direct users to item list
     res.redirect('/listItems');
+    // TODO: direct admin to admin panel
   }
   else {
     req.session.destroy(()=>{});  // Safe asyncrhous call
