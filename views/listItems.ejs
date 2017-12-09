@@ -8,26 +8,37 @@
 
 <%- include header.ejs %>
 
-  <div id=content>
-    <h5>List of items</h5>
-
+  <div id="content" class="container">
+    <div class="container mt-3">
+      <h5>List of items</h5>
+    </div>
+    <div id="sort" class="container mb-2">
     <a href="?<%=ascQuery%>">Order by Creation Time (Ascending Order)</a><br>
     <a href="?<%=desQuery%>">Order by Creation Time (Descending Order)</a><br>
-
-    <ul>
+    </div>
+    <div class="container">
+    <ul class="list-group">
     <% for (let item of pageData.items) {
         let q = Query.stringify({id: item._id});
       %>
-        <li>
-          <a href="/item?<%=q%>"><span><%=item.title%></span></a>
+        <!-- <li class="list-group-item justify-content-between"> -->
+          <a href="/item?<%=q%>" class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1"><%=item.title%></h5><small ><%=item.createdOn.toLocaleString()%></small><br>
+          </div>
           <span><%=item.token_value.toLocaleString()%></span>
           <%#  ********TODO Add img link into database of the item %>
           <%#  **** Retrieve it as an image href for display       %>
-          <span><%=item.quantity.toLocaleString()%></span>
-          <span><%=item.createdOn.toLocaleString()%></span>
-        </li>
+
+          <span class="badge badge-default badge-pill">Qunatity: <%=item.quantity.toLocaleString()%></span>
+
+          </a>
+
+
+        <!-- </li> -->
     <% } %>
     </ul>
+  </div>
 
     <ul>
     <%

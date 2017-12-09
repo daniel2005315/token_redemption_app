@@ -10,13 +10,23 @@
     locals.userData = locals.userData || "";
     var userData = locals.userData;
   %>
-  <div id=content>
-      <h5><%=locals.data.title%></h5>
+  <div id=content class="container">
+      <div class="card text-center mb-3 mt-5">
+        <img class="card-img-top" src="<%=data.image%>" alt="Image cap">
+        <div class="card-block">
+          <h5 class="card-title mt-4"><%=data.title%></h5>
+          <p class="card-text"><small class="text-muted">Item id: <%=data._id%></small></p>
+          <p class="card-text"><%=data.description%></p>
+          <p class="card-text"><%=data.token_value%></p>
+          <p class="card-text"><%=data.quantity%></p>
+          <p class="card-text"><small><%=data.tags%></small></p>
+          <p class="card-text"><small class="text-muted">Created on: <%=data.createdOn%></small></p>
+          <%#  ********TODO Add img link into database of the item %>
+          <%#  **** Retrieve it as an image href for display       %>
+          <button id="redeem" type="button" class="btn btn-success mb-4">Redeem</button>
+        </div>
+      </div>
 
-      <pre>
-        <%=locals.data%>
-      </pre>
-      <button id="redeem" type="button" class="btn btn-success">Redeem</button>
 
       <div id="loginAlert" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
       <!--  <div class="modal-dialog modal-sm"> -->

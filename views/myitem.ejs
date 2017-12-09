@@ -3,9 +3,17 @@
   <div id=content>
       <h5>My items</h5>
 
-      <pre>
-        <%=locals.data%>
-      </pre>
+      <ul>
+      <% for (let item of data.items) {
+        %>
+          <li>
+            <span><%=item.title%></span>
+            <span><%=item.token_value.toLocaleString()%></span>
+            <span><%=item.itemId.toLocaleString()%></span>
+            <span><%=item.timeStamp.toLocaleString()%></span>
+          </li>
+      <% } %>
+      </ul>
   </div>
 
 <%- include footer.ejs %>
