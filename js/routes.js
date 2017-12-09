@@ -86,15 +86,6 @@ app.get('/', (req, res) => {
    res.render('index.ejs', { title: 'Main'});
 });
 
-/* Not employing Approach #1
-// Approach #1
-app.get('/listItems', (req, res) => {
-  // Simply return the HTMl page.
-  // Use client-side JS to retrieve data and render page
-  res.render('listItems.ejs', { title: 'Item Listing' });
-});
-*/
-
 // Listing out all the items
 // We use Approach #2: Render the page on server side
 app.get('/listItems', async (req, res) => {
@@ -113,7 +104,7 @@ app.get('/listItems', async (req, res) => {
     console.log(pageData);
     console.log(Query);
     // Step 5: Render the view
-    res.render('listItems2.ejs', { title: 'Item Listing', pageData: pageData, Query: Query });
+    res.render('listItems.ejs', { title: 'Item Listing', pageData: pageData, Query: Query });
   } catch (err) {
     console.error(err);
     res.status(500).send('Error!');
