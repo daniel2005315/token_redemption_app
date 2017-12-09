@@ -76,17 +76,29 @@ function populateData() {
     model.Item.create(items, function(err, _items) {
       if (err) handleError(err);
 
-    /* Does not work
-    // replace all item ids with their created index
-    for (var i = 0; i < items.length; i++) {
-      items[i].id = _items[i]._id;
-    }
-    */
+      var record=new model.Record({
+        username: 'john',
+        itemId: '1a2b3c4d',
+        title:'Test Item',
+        token_value:10,
+      });
+      console.log(record);
+      model.Record.create(record, function(err, _record) {
+        if (err) handleError(err);
 
-      // Success
-      console.log(_users);
-      console.log(_items);
-      mongoose.connection.close();
+      /* Does not work
+      // replace all item ids with their created index
+      for (var i = 0; i < items.length; i++) {
+        items[i].id = _items[i]._id;
+      }
+      */
+
+        // Success
+        console.log(_users);
+        console.log(_items);
+        console.log(_record);
+        mongoose.connection.close();
+      });
     });
   });
 }

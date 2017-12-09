@@ -14,7 +14,7 @@ var UserSchema = Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   balance:{type: Number, min:0},
-  items:[ { type: String } ]
+  items:{type:Array, default:[]}
 });
 
 /*
@@ -39,8 +39,18 @@ var ItemSchema = Schema({
   tags: [ { type: String } ]
 });
 
+// store redeem record
+var RecordSchema = Schema({
+  username: { type: String, required: true},
+  itemId: { type: String, required: true },
+  title:{type:String, required: true},
+  token_value:{type: Number},
+  createdOn: { type: Date, default: Date.now }
+});
+
 var User = mongoose.model('User', UserSchema);
 var Item = mongoose.model('Item', ItemSchema);
+var Record = mongoose.model('Record', RecordSchema);
 
 
 class PaginationData {
@@ -111,13 +121,81 @@ async function getItems(page, orderBy, order) {
   return pData;
 }
 
+
 async function getItem(id) {
   let _id = new mongoose.Types.ObjectId(id);
   let result = await Item.
-    findOne( {_id: _id} ).
-    populate('owner', 'username'). // only return the owner's username
+    findOne( {_id: _id}). // only return item's value and quantity
     exec();
   return result;
+}
+
+// update item quantity -1
+// update user balance - item value
+// insert item to record
+async function redeemItem(id,user){
+  console.log("Redeeming item with id "+id+" for user =>"+user);
+  var updateFlag=false;
+  // update the database first
+  let _id = new mongoose.Types.ObjectId(id);
+
+  // Decrease number of item in database first
+  let item = await Item.findOne({_id, _id}).exec();
+  //console.log(item);
+  item.quantity=item.quantity-1;
+  console.log("this line appears after item info");
+
+  try{
+    let operation = await item.save();
+    console.log("***Decreased number of items!");
+    let userUpdate = await User.findOneAndUpdate({username:user},{$inc:{balance:-item.token_value}}).exec();
+    console.log("***Updated user's balance");
+    //console.log("appending item =>"+item);
+    //let userItemsUpdate = await User.findOneAndUpdate({username:user},{$push:{items:item}}).exec();
+    //console.log("***Updated user's items");
+    console.log("adding -> "+typeof user+" "+
+              typeof _id.toString()+" "+typeof item.title+" "+typeof item.token_value);
+    let recordUpdate = await addRecord(user,_id.toString(),item.title,item.token_value);
+    console.log("***Added record entry "+recordUpdate);
+    var entry = {
+      itemId: recordUpdate.itemId,
+      title: recordUpdate.title,
+      token_value: recordUpdate.token_value,
+      timeStamp: recordUpdate.createdOn
+    };
+    let userItemsUpdate = await User.findOneAndUpdate({username:user},{$push:{items:entry}}).exec();
+    console.log("***update items");
+    return true;
+  }catch(err){
+    console.log(err.name);
+    return false;
+  }
+
+  /*
+  .then(function(){
+    console.log("Success");
+
+    // Update user's database
+    User.findOneAndUpdate({username:user},{$inc:{balance:-item.token_value}},
+      function(err,result){
+        if(err==null){
+          console.log("data from user update->\n"+result);
+          // both successful, return the updated data of item and userInfo
+          updateFlag = true;
+          return updateFlag;
+        }else{
+          updateFlag = false;
+          return updateFlag;
+          console.log("error occured: "+err.name);
+        }
+      }
+    );
+  }, function(err){
+    console.log(err.name);
+    updateFlag=false;
+    return updateFlag;
+  });
+  */
 }
 
 // Get userInfo (everything)
@@ -128,6 +206,26 @@ async function getInfo(username){
   return result;
 }
 
+// Add record
+async function addRecord(username,itemId,title,token_value){
+  console.log("**** Function called");
+  var record= new Record({
+    username: username,
+    itemId: itemId,
+    title:title,
+    token_value:token_value
+  });
+  console.log("**** record created");
+  try{
+    let result = await record.save();
+    console.log(result);
+    return result;
+  }catch(err){
+    console.log(err);
+    return false;
+  }
+}
+
 // Place holder for authentication
 function authenticate(username, password) {
   return (username === 'john' && password === '123');
@@ -136,8 +234,10 @@ function authenticate(username, password) {
 module.exports = {
   User: User,
   Item: Item,
+  Record: Record,
   authenticate: authenticate,
   getItems: getItems,
   getItem: getItem,
-  getInfo: getInfo
+  getInfo: getInfo,
+  redeemItem: redeemItem
 }

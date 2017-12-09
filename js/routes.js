@@ -21,15 +21,22 @@ app.use('/ajax', require('./ajaxRoutes.js'));
 
 // Middleware to check if user has logged in
 // By adding a "user" parameter too all template's local object
-app.use(function(req, res, next) {
+app.use(async function(req, res, next) {
   if(req.session.user!=null){
     // Store user info inside session
-    res.locals.userData=req.session.userData;
-
+    try{
+      console.log("calling middleware!!!! "+typeof req.next);
+      let userData = await model.getInfo(req.session.user);
+      console.log("User data returned = "+userData);
+      req.session.userData = userData;
+      res.locals.userData=req.session.userData;
+    }catch(err){
+      console.log(err.name);
+    }
   }
   res.locals.user = req.session.user;
-
   next();
+
 });
 
 // Serve login page view
@@ -113,6 +120,7 @@ app.get('/listItems', async (req, res) => {
   }
 });
 
+// query for showing item detailed view
 app.get('/item', async (req, res) => {
 
   try {
@@ -129,10 +137,12 @@ app.get('/item', async (req, res) => {
 
 app.get('/myitem', async (req, res)=>{
   // TODO: Get the items where the user has redeemed
-  let data = "To be implemented";
+  let data = await model.getInfo(req.session.user);
   res.render('myitem.ejs',{ title: 'My Item', data: data});
 
 })
+
+
 
 // CSS files, images, client-side JS files should be in ./public
 app.use(express.static('public'));

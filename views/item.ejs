@@ -1,11 +1,69 @@
 <%- include header.ejs %>
 
+  <%
+    // pass value to script
+    locals.data=locals.data;
+    var itemid = locals.data._id;
+
+    // for updating header
+    locals.user = locals.user || "";
+    locals.userData = locals.userData || "";
+    var userData = locals.userData;
+  %>
   <div id=content>
-      <h5>Place holder for showing an item in details</h5>
+      <h5><%=locals.data.title%></h5>
 
       <pre>
         <%=locals.data%>
       </pre>
+      <button id="redeem" type="button" class="btn btn-success">Redeem</button>
+
+      <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <!--  <div class="modal-dialog modal-sm"> -->
+          <div class="alert alert-danger mt-5 mx-5 px-5" role="alert">
+            <strong>Unauthorized!</strong>
+            <p> Please <a href="/login" class="tooltip-test" title="Tooltip">Login</a> first.</p>
+          </div>
+      <!-- </div> -->
+    </div>
+
+
   </div>
 
 <%- include footer.ejs %>
+
+<script>
+// Javascript for sending ajax call here
+$(document).ready(function() {
+  $("#redeem").click(function sendAjaxGet1() {
+  // In this example, the data (name-vallue pairs) to be sent are
+  // foo=abc and bar=12345.
+
+  // Represent each name-value pair as a property of an object
+  let mydata = {};
+  mydata.foo = "abc";
+  mydata.bar = 12345;
+  // try using ejs locals data
+  mydata.id = "<%=itemid%>";
+
+    $.ajax({
+      url: '/ajax/redeem',
+      data: mydata,
+      success: (result) => {
+        console.log("The data in the response is\n", result);
+        // Do handling base on returned result
+        if(result.loginAlert==true){
+          // Show alert message
+          $(".modal").modal();
+          //alert("Login first!");
+        }else{
+          // Check if the update was successful
+          if(result.update==true){
+            $("#userBalance").text(<%= userData.balance%>);
+          }
+        }
+      }
+    });
+  });
+});
+</script>
