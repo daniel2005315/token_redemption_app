@@ -163,39 +163,13 @@ async function redeemItem(id,user){
       token_value: recordUpdate.token_value,
       timeStamp: recordUpdate.createdOn
     };
-    let userItemsUpdate = await User.findOneAndUpdate({username:user},{$push:{items:entry}}).exec();
+    let updatedUser = await User.findOneAndUpdate({username:user},{$push:{items:entry}}).exec();
     console.log("***update items");
-    return true;
+    return updatedUser;
   }catch(err){
     console.log(err.name);
     return false;
   }
-
-  /*
-  .then(function(){
-    console.log("Success");
-
-    // Update user's database
-    User.findOneAndUpdate({username:user},{$inc:{balance:-item.token_value}},
-      function(err,result){
-        if(err==null){
-          console.log("data from user update->\n"+result);
-          // both successful, return the updated data of item and userInfo
-          updateFlag = true;
-          return updateFlag;
-        }else{
-          updateFlag = false;
-          return updateFlag;
-          console.log("error occured: "+err.name);
-        }
-      }
-    );
-  }, function(err){
-    console.log(err.name);
-    updateFlag=false;
-    return updateFlag;
-  });
-  */
 }
 
 // Get userInfo (everything)

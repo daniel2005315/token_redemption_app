@@ -10,22 +10,8 @@ let model = require('./model.js');
 
 module.exports = router;
 
-router.get('/items', async (req, res) => {
-  // Step 1: Retrieve input data from the request
-   let page = req.query.page-0;       // Convert to number
-   let orderBy = req.query.orderBy-0; // Convert to number
-   let order = req.query.order-0;     // Convert to number
 
-  // Step 2 (TODO): Validate input and check if the user
-  // has the right to proceed.
-
-  // Step 3: Apply "business logic", and
-  // Step 4: Prepare the data needed by the view (client-side)
-   let items = await model.getItems(page, orderBy, order);
-   res.json(items);
-});
-
-// TODO: Ajax handler for redeeming item and update database
+// DONE: Ajax handler for redeeming item and update database
 router.get('/redeem',async(req,res)=>{
   console.log("** Ajax call for redeeming item received!");
   let itemid = req.query.id;
@@ -52,11 +38,15 @@ router.get('/redeem',async(req,res)=>{
       try{
         let result = await model.redeemItem(itemid,req.session.user);
         console.log("data from ajaxroute:\n"+result);
+        // update session info for userData
+        let userData = await model.getInfo(req.session.user);
+        //console.log("User data returned = "+userData);
+        req.session.userData = userData;
+        res.locals.userData=req.session.userData;
         res.send({update:result});
       }catch(err){
         res.send({update:false});
       }
     }
-
   }
 });

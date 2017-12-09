@@ -18,14 +18,23 @@
       </pre>
       <button id="redeem" type="button" class="btn btn-success">Redeem</button>
 
-      <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div id="loginAlert" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
       <!--  <div class="modal-dialog modal-sm"> -->
           <div class="alert alert-danger mt-5 mx-5 px-5" role="alert">
             <strong>Unauthorized!</strong>
             <p> Please <a href="/login" class="tooltip-test" title="Tooltip">Login</a> first.</p>
           </div>
       <!-- </div> -->
-    </div>
+      </div>
+
+      <div id="error" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-bm">
+          <div class="alert alert-danger mt-5 mx-5 px-5" role="alert">
+            <strong>Opps!</strong>
+            <p> Unable to redeem the item</p>
+          </div>
+       </div>
+      </div>
 
 
   </div>
@@ -54,12 +63,14 @@ $(document).ready(function() {
         // Do handling base on returned result
         if(result.loginAlert==true){
           // Show alert message
-          $(".modal").modal();
-          //alert("Login first!");
+          $("#loginAlert").modal();
         }else{
           // Check if the update was successful
-          if(result.update==true){
-            $("#userBalance").text(<%= userData.balance%>);
+          if(result.update!=false){
+            $("#userBalance").text("Your balance is: "+result.update.balance);
+          }else{
+            // the update was not successful
+            $("#error").modal();
           }
         }
       }
