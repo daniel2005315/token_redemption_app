@@ -95,7 +95,7 @@
                                                 <th>Token Value</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="tablecontent">
                                             <tr class="odd gradeX">
                                                 <td><a href="./item_detail.html"><button class="btn btn-primary"><i class="icon-edit icon-white"></i></button></a> <button class="btn btn-danger"><i class="icon-remove icon-white"></i></button></td>
                                                 <td>Trident</td>
@@ -579,6 +579,23 @@
         $(function() {
             // Easy pie charts
             $('.chart').easyPieChart({animate: 1000});
+        });
+
+        $(function(){
+            $.ajax({
+                url: "",
+                type: "GET",
+                success: function(result){
+                   //console.log(result);
+                   if(result.length != 0){
+                     for(var i = 0;i < result.length;i++){
+                        $("#tablecontent").html("<tr class='gradeA'><td><button class='btn btn-primary'><i class='icon-edit icon-white'></i></button> <button class='btn btn-danger'><i class='icon-remove icon-white'></i></button></td><td>Other browsers</td><td>All others</td><td>-</td><td class='center'>-</td><td class='center'>U</td>");
+                    }
+                   }else{
+                    alert("No record found");
+                   }
+                 }
+            });
         });
         </script>
     </body>
