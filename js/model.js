@@ -105,6 +105,9 @@ async function getItems(page, orderBy, order) {
   let sortParam = {};
   if (orderBy == 1)
     sortParam = { createdOn: order };
+  // TODO: added sort by redeem cost
+  if (orderBy == 2)
+    sortParam = { token_value: order};
 
   // ----- Construct query and retrieve items from DB -----
   // Construct query

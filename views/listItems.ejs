@@ -2,8 +2,14 @@
 
   let ascQuery, desQuery; // Query strings for listing items in different orders
 
-  ascQuery = Query.stringify({page:pageData.currentPage, orderBy:1, order:1});
-  desQuery = Query.stringify({page:pageData.currentPage, orderBy:1, order:-1});
+  ascQueryC = Query.stringify({page:pageData.currentPage, orderBy:1, order:1});
+  desQueryC = Query.stringify({page:pageData.currentPage, orderBy:1, order:-1});
+  ascQueryV = Query.stringify({page:pageData.currentPage, orderBy:2, order:1});
+  desQueryV = Query.stringify({page:pageData.currentPage, orderBy:2, order:-1});
+
+
+  locals.order=locals.order||1;
+  locals.orderBy=locals.orderBy||1;
 %>
 
 <%- include header.ejs %>
@@ -12,48 +18,75 @@
     <div class="container mt-3">
       <h5>List of items</h5>
     </div>
-    <div id="sort" class="container mb-2">
-    <a href="?<%=ascQuery%>">Order by Creation Time (Ascending Order)</a><br>
-    <a href="?<%=desQuery%>">Order by Creation Time (Descending Order)</a><br>
-    </div>
-    <div class="container">
-    <ul class="list-group">
+    <div class="container-fluid">
+    <ul id="mainList" class="list-group" style="display:none">
+      <div class="d-flex w-100 justify-content-between">
+
+      <span class="btn  col-4 text-center">Title</span>
+
+      <a id="ascC" class="btn col-4 text-center" href="?<%=ascQueryC%>" >Creation Time &#9660;</a>
+      <a id="desC" class="btn col-4 text-center" href="?<%=desQueryC%>" >Creation Time &#9650;</a>
+      <a id="ascV" class="btn btn-info col-2 text-center" href="?<%=ascQueryV%>" >Value &#9660;</a>
+      <a id="desV" class="btn btn-info col-2 text-center" href="?<%=desQueryV%>" >Value &#9650;</a>
+      <!-- <span class="btn btn-info col-2 text-center" >Value</span> -->
+      <span class="btn btn-success col-2 text-center">Quantity</span>
+      </div>
     <% for (let item of pageData.items) {
         let q = Query.stringify({id: item._id});
       %>
         <!-- <li class="list-group-item justify-content-between"> -->
           <a href="/item?<%=q%>" class="list-group-item list-group-item-action flex-column align-items-start">
           <div class="d-flex w-100 justify-content-between">
-          <h5 class="mb-1"><%=item.title%></h5><small ><%=item.createdOn.toLocaleString()%></small><br>
+
+          <h5 class="col-4 text-center"><%=item.title%></h5>
+          <small class="col-4 text-center" ><%=item.createdOn.toLocaleString()%></small>
+          <span class="col-2 text-center"><%=item.token_value.toLocaleString()%></span>
+          <span class="col-2 text-center"><%=item.quantity.toLocaleString()%></span>
           </div>
-          <span><%=item.token_value.toLocaleString()%></span>
-          <%#  ********TODO Add img link into database of the item %>
-          <%#  **** Retrieve it as an image href for display       %>
-
-          <span class="badge badge-default badge-pill">Qunatity: <%=item.quantity.toLocaleString()%></span>
-
           </a>
-
-
         <!-- </li> -->
     <% } %>
     </ul>
   </div>
-
-    <ul>
+  <div class="container mt-2">
+    <ul class="pagination">
     <%
        let params = JSON.parse(JSON.stringify(pageData.params)); // Clone the params object
        for (let i = 0; i < pageData.pageCount; i++) {
          params.page = i+1;
          let q = Query.stringify(params);
       %>
-      <a href="?<%=q%>"><button><%=params.page%></button></a>
+      <li id="<%=i+1%>" class="page-item"><a class="page-link" href="?<%=q%>"><%=params.page%></a></li>
       &nbsp;
     <% } %>
     </ul>
-
+  </div>
 
 
   </div>
 
 <%- include footer.ejs %>
+
+<script>
+$(document).ready(function() {
+  var order=<%=locals.order%>;
+  var orderBy=<%=locals.orderBy%>;
+    if(order==1){
+    $("#ascC").hide();
+    $("#ascV").hide();
+    }else{
+    $("#desC").hide();
+    $("#desV").hide();
+    }
+
+  $("#<%=pageData.currentPage%>").addClass("active");
+
+  $("#mainList").show();
+/*
+  $("#desC").click(function(){
+    $("#ascC").show();
+    $("#desC").hide();
+  });
+  */
+});
+</script>

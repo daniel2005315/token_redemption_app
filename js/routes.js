@@ -104,7 +104,8 @@ app.get('/listItems', async (req, res) => {
     console.log(pageData);
     console.log(Query);
     // Step 5: Render the view
-    res.render('listItems.ejs', { title: 'Item Listing', pageData: pageData, Query: Query });
+    console.log("**************"+order);
+    res.render('listItems.ejs', { title: 'Item Listing', pageData: pageData, Query: Query, order:order, orderBy:orderBy });
   } catch (err) {
     console.error(err);
     res.status(500).send('Error!');

@@ -17,8 +17,8 @@
           <h5 class="card-title mt-4"><%=data.title%></h5>
           <p class="card-text"><small class="text-muted">Item id: <%=data._id%></small></p>
           <p class="card-text"><%=data.description%></p>
-          <p class="card-text"><%=data.token_value%></p>
-          <p class="card-text"><%=data.quantity%></p>
+          <p class="card-text">Value: <%=data.token_value%></p>
+          <p class="card-text">Quantity: <%=data.quantity%></p>
           <p class="card-text"><small><%=data.tags%></small></p>
           <p class="card-text"><small class="text-muted">Created on: <%=data.createdOn%></small></p>
           <%#  ********TODO Add img link into database of the item %>
@@ -42,6 +42,15 @@
           <div class="alert alert-danger mt-5 mx-5 px-5" role="alert">
             <strong>Opps!</strong>
             <p> Unable to redeem the item</p>
+          </div>
+       </div>
+      </div>
+
+      <div id="success" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-bm">
+          <div class="alert alert-success mt-5 mx-5 px-5" role="alert">
+            <strong>Success!</strong>
+            <p> You have redeemed the item!</p>
           </div>
        </div>
       </div>
@@ -78,6 +87,7 @@ $(document).ready(function() {
           // Check if the update was successful
           if(result.update!=false){
             $("#userBalance").text("Your balance is: "+result.update.balance);
+            $("#success").modal();
           }else{
             // the update was not successful
             $("#error").modal();
