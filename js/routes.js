@@ -135,7 +135,6 @@ app.get('/myitem', async (req, res)=>{
 
 app.get('/be_listitem', async (req, res) => {
   try {
-
     let data = await model.getAllItems();
     console.log(data);
     // Step 5: Render the view
@@ -147,17 +146,29 @@ app.get('/be_listitem', async (req, res) => {
 });
 
 app.get('/be_item', async (req, res) => {
-
   try {
     let itemId = req.query.id;
-    let data = await model.getItem(itemId);
-    // Data can be null if not found
-    res.render('./backend/be_itemdetail.ejs', { title: 'Item', data: data, Query: Query });
+    if(itemId != "null"){
+      //console.log(itemId);
+      let data = await model.getItem(itemId);
+      // Data can be null if not found
+      res.render('./backend/be_itemdetail.ejs', { title: 'Item', data: data, Query: Query });
+    }else{
+      let data = "";
+      res.render('./backend/be_itemdetail.ejs',{title: 'Item',data : data});
+    }
   } catch (err) {
     console.error(err);
     res.status(500).send('Error!');
   }
 
+});
+
+app.post('/update_item', async(req, res) => {
+  let id = req.body.id;
+  console.log(id);
+  //res.send("Not yet implemented.");  // Place holder
+  res.redirect('/be_listitem');
 });
 
 

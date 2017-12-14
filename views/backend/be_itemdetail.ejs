@@ -19,6 +19,7 @@
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
         <script src="/backend/vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+        <script src="/backend/vendors/jquery-1.9.1.js"></script>
     </head>
     
     <body>
@@ -76,7 +77,7 @@
                             </div>
                             <div class="block-content collapse in">
                                 <div class="span12">
-                                    <form action="#" id="form_sample_1" class="form-horizontal">
+                                    <form action="/update_item" id="form_sample_1" class="form-horizontal" method="post">
                                       <fieldset>
                                         <div class="alert alert-error hide">
                                         <button class="close" data-dismiss="alert"></button>
@@ -87,6 +88,7 @@
                                         Your form validation is successful!
                                       </div>
                                         <legend>Edit Item</legend>
+                                        <input type="hidden" id="id" value="<%=data._id%>">
                                         <div class="control-group">
                                           <label class="control-label">Title<span class="required">*</span></label>
                                           <div class="controls">
@@ -108,28 +110,53 @@
                                         <div class="control-group">
                                           <label class="control-label" for="multiSelect">Tags</label>
                                           <div class="controls">
-                                            <select multiple="multiple" id="multiSelect" class="chzn-select span4">
-                                             <option>yummy</option>
-                                             <option>delicious</option>
-                                             <option>yuk</option>
-                                             <option>pretty</option>
-                                             <option>funny</option>
-                                             <option>pricy</option>
-                                             <option>meh</option>
-                                             <option>interesting</option>
-                                             <option>omg</option>
-                                             <option>bravo</option>
+                                            <select id="tags" multiple="multiple" id="multiSelect" class="chzn-select span4">
+                                             <option value='yummy'>yummy</option>
+                                             <option value='delicious'>delicious</option>
+                                             <option value='yuk'>yuk</option>
+                                             <option value='pretty'>pretty</option>
+                                             <option value='funny'>funny</option>
+                                             <option value='pricy'>pricy</option>
+                                             <option value='meh'>meh</option>
+                                             <option value='interesting'>interesting</option>
+                                             <option value='omg'>omg</option>
+                                             <option value='bravo'>bravo</option>
                                             </select>
                                           </div>
-
                                         </div>
+                                        <input id=default_tags type="hidden" value="<%=data.tags%>"/>
+                                         <script>
+                                          $(document).ready(function(){ 
+                                            let tags = $("#default_tags").val().split(",");
+                                            console.log(tags);
+                                            $.each(tags, function(i,e){
+                                              $("#tags option[value='" + e + "']").prop("selected", true);
+                                            });
+                                          });
+                                        </script>
                                         <div class="control-group">
                                           <label class="control-label" for="fileInput">Image</label>
                                           <div class="controls">
-                                            <img src="<%=data.image%>" alt="Image cap">
+                                            <img id="images" src="<%=data.image%>" alt="Image cap" class="img-circle">
                                             <input class="input-file uniform_on" id="fileInput" type="file">
                                           </div>
                                         </div>
+                                        <script>
+                                          function readURL(input) {
+                                              if (input.files && input.files[0]) {
+                                                var reader = new FileReader();
+
+                                                reader.onload = function(e) {
+                                                  $('#images').attr('src', e.target.result);
+                                                }
+                                                reader.readAsDataURL(input.files[0]);
+                                              }
+                                            }
+
+                                            $("#fileInput").change(function() {
+                                              readURL(this);
+                                            });
+                                        </script>
                                         <div class="control-group">
                                           <label class="control-label" for="textarea2">Description</label>
                                           <div class="controls">
@@ -154,7 +181,6 @@
         </div>
         <!--/.fluid-container-->
 
-        <script src="/backend/vendors/jquery-1.9.1.js"></script>
         <script src="/backend/bootstrap/js/bootstrap.min.js"></script>
         <script src="/backend/vendors/datatables/js/jquery.dataTables.min.js"></script>
         <script src="/backend/vendors/jquery.uniform.min.js"></script>
@@ -173,9 +199,8 @@
         <script src="/backend/assets/scripts.js"></script>
         <script src="/backend/assets/DT_bootstrap.js"></script>
         <script>
-
         jQuery(document).ready(function() {   
-           FormValidation.init();
+           //FormValidation.init();
         });
         
 
