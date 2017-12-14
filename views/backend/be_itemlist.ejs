@@ -1,0 +1,83 @@
+
+<% // Compute the values needed by this template
+
+  let ascQuery, desQuery; // Query strings for listing items in different orders
+
+  ascQuery = Query.stringify({page:pageData.currentPage, orderBy:1, order:1});
+  desQuery = Query.stringify({page:pageData.currentPage, orderBy:1, order:-1});
+%>
+
+<%- include header.ejs %>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span3" id="sidebar">
+                    <ul class="nav nav-list bs-docs-sidenav nav-collapse collapse">
+                        <li>
+                            <a href="index.html"><i class="icon-chevron-right"></i> Dashboard</a>
+                        </li>
+                        <li class="active">
+                            <a href="item.html"><i class="icon-chevron-right"></i> Item</a>
+                        </li>
+                    </ul>
+                </div>
+
+                    <!--/span-->
+                     <div class="span9" id="content">
+                            <div class="row-fluid">
+                            <!-- block -->
+                            <div class="block">
+                                <div class="navbar navbar-inner block-header">
+                                    <div class="muted pull-left">Item List</div>
+                                </div>
+                                <div class="block-content collapse in">
+                                    <div class="span12">
+                                       <div class="table-toolbar">
+                                          <div class="btn-group">
+                                             <a href="./item_detail.html"><button class="btn btn-success">Add New <i class="icon-plus icon-white"></i></button></a>
+                                          </div>
+                                          <div class="btn-group pull-right">
+                                             <button data-toggle="dropdown" class="btn dropdown-toggle">Tools <span class="caret"></span></button>
+                                             <ul class="dropdown-menu">
+                                                <li><a href="#">Print</a></li>
+                                                <li><a href="#">Save as PDF</a></li>
+                                                <li><a href="#">Export to Excel</a></li>
+                                             </ul>
+                                          </div>
+                                       </div>
+                                        
+                                        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example2">
+                                            <thead>
+                                                <tr>
+                                                    <th>Action</th>
+                                                    <th>Title</th>
+                                                    <th>Description</th>
+                                                    <th>Tag</th>
+                                                    <th>Quantity</th>
+                                                    <th>Token Value</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tablecontent">
+                                                <% for (let item of pageData.items) {
+                                                    let q = Query.stringify({id: item._id});
+                                                 %>    
+                                                <tr class="gradeU">
+                                                    <td><button class="btn btn-primary"><i class="icon-edit icon-white"></i></button> <button class="btn btn-danger"><i class="icon-remove icon-white"></i></button></td>
+                                                    <td><%=item.title%></td>
+                                                    <td><%=item.description%></td>
+                                                    <td><%=item.tag%></td>
+                                                    <td class="center"><%=item.quantity.toLocaleString()%></td>
+                                                    <td class="center"><%=item.token_value.toLocaleString()%></td>
+                                                </tr>
+                                                 <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        <!-- Block -->
+                    </div>
+                <hr>
+            </div>
+
+<%- include footer.ejs %>
+
