@@ -136,7 +136,7 @@ app.get('/myitem', async (req, res)=>{
 app.get('/be_listitem', async (req, res) => {
   try {
     let data = await model.getAllItems();
-    console.log(data);
+    //console.log(data);
     // Step 5: Render the view
     res.render('./backend/be_itemlist.ejs', { title: 'Item Listing', data: data,Query: Query});
   } catch (err) {
@@ -164,11 +164,22 @@ app.get('/be_item', async (req, res) => {
 
 });
 
-app.post('/update_item', async(req, res) => {
-  let id = req.body.id;
-  console.log(id);
-  //res.send("Not yet implemented.");  // Place holder
-  res.redirect('/be_listitem');
+app.post('/update_item', urlencodedParser ,async(req, res)=>{
+  try {
+    let id = req.body._id;
+    let title = req.body.title;
+    let quantity = req.body.quantity;
+    let token_value = req.body.token_value;
+    let description = req.body.description;
+
+    let data = await model.getItem(id);
+    
+    //res.send("Not yet implemented.");  // Place holder
+    res.redirect('/be_listitem');
+  }catch (err){
+    console.error(err);
+    res.status(500).send('Error!');
+  }
 });
 
 

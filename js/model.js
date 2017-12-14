@@ -123,11 +123,16 @@ async function getItems(page, orderBy, order) {
 
 
 async function getItem(id) {
-  let _id = new mongoose.Types.ObjectId(id);
-  let result = await Item.
+  try{
+    let _id = new mongoose.Types.ObjectId(id);
+    let result = await Item.
     findOne( {_id: _id}). // only return item's value and quantity
     exec();
-  return result;
+    return result;
+  }catch(err){
+    console.log(err.name);
+    return false;
+  }
 }
 
 // update item quantity -1
@@ -206,11 +211,58 @@ function authenticate(username, password) {
 }
 
 async function getAllItems() {
-  let condition = {}
-  let result = await Item.
-    find(condition). // only return item's value and quantity
-    exec();
-  return result;
+  try{
+    let condition = {}
+    let result = await Item.
+      find(condition). // only return item's value and quantity
+      exec();
+    return result;
+    }catch(err){
+    console.log(err);
+    return false;
+  }
+}
+
+async function addItem(id, title, description, image, token_value, quantity, createdOn, tags){
+  console.log("**** Function called");
+  var item= new Item({
+    title: title,
+    description: description,
+    image:image,
+    token_value:token_value,
+    quantity:quantity,
+    tags:tags
+  });
+
+  try{
+    let result = await item.save();
+    console.log(result);
+    return result;
+  }catch(err){
+    console.log(err);
+    return false;
+  }
+}
+
+async function updateItems(id, title, description, image, token_value, quantity, createdOn, tags){
+  console.log("**** Function called");
+  var item= new Item({
+    title: title,
+    description: description,
+    image:image,
+    token_value:token_value,
+    quantity:quantity,
+    tags:tags
+  });
+
+  try{
+    let result = await item.save();
+    console.log(result);
+    return result;
+  }catch(err){
+    console.log(err);
+    return false;
+  }
 }
 
 module.exports = {

@@ -62,7 +62,7 @@
                             <a href="index.html"><i class="icon-chevron-right"></i> Dashboard</a>
                         </li>
                         <li class="active">
-                            <a href="item.html"><i class="icon-chevron-right"></i> Item</a>
+                            <a href="/be_listitem"><i class="icon-chevron-right"></i> Item</a>
                         </li>
                     </ul>
                 </div>
@@ -88,29 +88,29 @@
                                         Your form validation is successful!
                                       </div>
                                         <legend>Edit Item</legend>
-                                        <input type="hidden" id="id" value="<%=data._id%>">
+                                        <input type="hidden" name="_id" value="<%=data._id.toLocaleString()%>">
                                         <div class="control-group">
                                           <label class="control-label">Title<span class="required">*</span></label>
                                           <div class="controls">
-                                            <input type="text" name="name" data-required="1" class="span6 m-wrap" value="<%=data.title%>"/>
+                                            <input type="text" name="title" data-required="1" class="span6 m-wrap" value="<%=data.title%>"/>
                                           </div>
                                         </div>
                                         <div class="control-group">
                                           <label class="control-label">Quanitity<span class="required">*</span></label>
                                           <div class="controls">
-                                            <input name="number" type="text" class="span6 m-wrap" value="<%=data.quantity%>"/>
+                                            <input name="quantity" type="text" class="span6 m-wrap" value="<%=data.quantity%>"/>
                                           </div>
                                         </div>
                                         <div class="control-group">
                                           <label class="control-label">Token Value<span class="required">*</span></label>
                                           <div class="controls">
-                                            <input name="digits" type="text" class="span6 m-wrap" value="<%=data.token_value%>"/>
+                                            <input name="token_value" type="text" class="span6 m-wrap" value="<%=data.token_value%>"/>
                                           </div>
                                         </div>
                                         <div class="control-group">
                                           <label class="control-label" for="multiSelect">Tags</label>
                                           <div class="controls">
-                                            <select id="tags" multiple="multiple" id="multiSelect" class="chzn-select span4">
+                                            <select id="tags" name="tags" multiple="multiple" id="multiSelect" class="chzn-select span4">
                                              <option value='yummy'>yummy</option>
                                              <option value='delicious'>delicious</option>
                                              <option value='yuk'>yuk</option>
@@ -160,7 +160,7 @@
                                         <div class="control-group">
                                           <label class="control-label" for="textarea2">Description</label>
                                           <div class="controls">
-                                            <textarea class="input-xlarge textarea" placeholder="Enter text ..." style="width: 810px; height: 200px"><%=data.description%></textarea>
+                                            <textarea name="description" class="input-xlarge textarea" placeholder="Enter text ..." style="width: 810px; height: 200px"><%=data.description%></textarea>
                                           </div>
                                         </div>
                                         <div class="form-actions">
