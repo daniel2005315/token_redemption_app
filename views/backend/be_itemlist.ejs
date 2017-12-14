@@ -1,11 +1,4 @@
 
-<% // Compute the values needed by this template
-
-  let ascQuery, desQuery; // Query strings for listing items in different orders
-
-  ascQuery = Query.stringify({page:pageData.currentPage, orderBy:1, order:1});
-  desQuery = Query.stringify({page:pageData.currentPage, orderBy:1, order:-1});
-%>
 
 <%- include header.ejs %>
         <div class="container-fluid">
@@ -57,16 +50,16 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="tablecontent">
-                                                <% for (let item of pageData.items) {
-                                                    let q = Query.stringify({id: item._id});
+                                                <% for (let item of data) {
+                                                let endcoded_id = Query.stringify({id: item._id});
                                                  %>    
                                                 <tr class="gradeU">
-                                                    <td><button class="btn btn-primary"><i class="icon-edit icon-white"></i></button> <button class="btn btn-danger"><i class="icon-remove icon-white"></i></button></td>
+                                                    <td><a href=/be_item?<%=endcoded_id%>><button class="btn btn-primary"><i class="icon-edit icon-white"></i></button></a><button class="btn btn-danger"><i class="icon-remove icon-white"></i></button></td>
                                                     <td><%=item.title%></td>
                                                     <td><%=item.description%></td>
                                                     <td><%=item.tag%></td>
-                                                    <td class="center"><%=item.quantity.toLocaleString()%></td>
-                                                    <td class="center"><%=item.token_value.toLocaleString()%></td>
+                                                    <td class="center"><%=item.quantity%></td>
+                                                    <td class="center"><%=item.token_value%></td>
                                                 </tr>
                                                  <% } %>
                                             </tbody>

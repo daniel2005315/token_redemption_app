@@ -135,25 +135,29 @@ app.get('/myitem', async (req, res)=>{
 
 app.get('/be_listitem', async (req, res) => {
   try {
-    // Step 1: Retrieve input data from the request
-    let page = req.query.page-0;       // Convert to number
-    let orderBy = req.query.orderBy-0; // Convert to number
-    let order = req.query.order-0;     // Convert to number
 
-    // Step 2 (TODO): Validate input and check if the user
-    // has the right to proceed.
-
-    // Step 3: Apply "business logic", and
-    // Step 4: Prepare the data needed by the view
-    let pageData = await model.getItems(page, orderBy, order);
-    console.log(pageData);
-    console.log(Query);
+    let data = await model.getAllItems();
+    console.log(data);
     // Step 5: Render the view
-    res.render('./backend/be_itemlist.ejs', { title: 'Item Listing', pageData: pageData, Query: Query });
+    res.render('./backend/be_itemlist.ejs', { title: 'Item Listing', data: data,Query: Query});
   } catch (err) {
     console.error(err);
     res.status(500).send('Error!');
   }
+});
+
+app.get('/be_item', async (req, res) => {
+
+  try {
+    let itemId = req.query.id;
+    let data = await model.getItem(itemId);
+    // Data can be null if not found
+    res.render('./backend/be_itemdetail.ejs', { title: 'Item', data: data, Query: Query });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error!');
+  }
+
 });
 
 

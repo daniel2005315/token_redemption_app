@@ -205,6 +205,14 @@ function authenticate(username, password) {
   return (username === 'john' && password === '123');
 }
 
+async function getAllItems() {
+  let condition = {}
+  let result = await Item.
+    find(condition). // only return item's value and quantity
+    exec();
+  return result;
+}
+
 module.exports = {
   User: User,
   Item: Item,
@@ -213,5 +221,6 @@ module.exports = {
   getItems: getItems,
   getItem: getItem,
   getInfo: getInfo,
-  redeemItem: redeemItem
+  redeemItem: redeemItem,
+  getAllItems: getAllItems
 }
