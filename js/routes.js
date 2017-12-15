@@ -45,7 +45,7 @@ app.use(async function(req, res, next) {
 });
 
 // Serve login page view
-app.get('/login', (req, res) => {
+app.get('/login*', (req, res) => {
    res.render('login.ejs', { title: 'Login Page' });
 });
 
