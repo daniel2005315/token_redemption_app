@@ -210,8 +210,22 @@ async function addRecord(username,itemId,title,token_value){
 }
 
 // Place holder for authentication
-function authenticate(username, password) {
-  return (username === 'john' && password === '123');
+async function authenticate(username, password) {
+  // TODO: authenticate with DB
+  try{
+  let authen = await User.findOne({username: username}).exec();
+  console.log("Attempting to login as"+ username+" pw checking...");
+    if(authen.password===password){
+        console.log("login success!");
+        return true;
+    }else{
+      return false;
+    }
+  }catch(err){
+    console.log(err);
+    return false;
+  }
+  //return (username === 'john' && password === '123');
 }
 
 async function getAllItems() {

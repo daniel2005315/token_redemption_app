@@ -54,35 +54,37 @@ app.post('/login', urlencodedParser, async (req, res) => {
   if(req.body.uname == "admin" && req.body.pword == "admin"){
       res.redirect('/be_listitem');
   }
+  try{
+    var authen = await model.authenticate(req.body.uname, req.body.pword);
+    if (authen === true) {
+      // req.session.regenerate() is asynchronous but it does not return a promise.
+      // In order to use await, the function call is then wrapped in a Promise object
+      await new Promise((resolve, reject)=> {
+        req.session.regenerate(resolve);      // Recreate the session
+      });
 
-  if (model.authenticate(req.body.uname, req.body.pword) === true) {
-    // req.session.regenerate() is asynchronous but it does not return a promise.
-    // In order to use await, the function call is then wrapped in a Promise object
-    await new Promise((resolve, reject)=> {
-      req.session.regenerate(resolve);      // Recreate the session
-    });
+      // TODO: Add handling to check if the user is normal user or admin user
+      req.session.user = req.body.uname;  // To represent successful login
 
-    // TODO: Add handling to check if the user is normal user or admin user
-    req.session.user = req.body.uname;  // To represent successful login
+      // Get user's info (balance, items)
+      // TODO: may include admin flag here and redirect user's login
+      let userData = await model.getInfo(req.session.user);
+      req.session.userData = userData;
+      console.log(userData);
+      // Direct users to item list
+      res.redirect('/listItems');
 
-    // Get user's info (balance, items)
-    // TODO: may include admin flag here and redirect user's login
-    let userData = await model.getInfo(req.session.user);
-    req.session.userData = userData;
-    console.log(userData);
-    // Direct users to item list
-    res.redirect('/listItems');
-    // TODO: direct admin to admin panel
+      }else{
+      req.session.destroy(()=>{});  // Safe asyncrhous call
+      res.render('login.ejs',
+        { title: 'Login Page',
+          loginMsg: 'Incorrect username or password! Please try again.',
+          username: req.body.uname
+        }
+      );
     }
-  else {
-    req.session.destroy(()=>{});  // Safe asyncrhous call
-    res.render('login.ejs',
-      { title: 'Login Page',
-        loginMsg: 'Incorrect username or password! Please try again.',
-        username: req.body.uname
-      }
-    );
-  }
+  }catch(err){ console.log(err);}
+
 });
 
 app.get('/logout', (req, res) => {

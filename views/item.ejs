@@ -18,7 +18,7 @@
           <p class="card-text"><small class="text-muted">Item id: <%=data._id%></small></p>
           <p class="card-text"><%=data.description%></p>
           <p class="card-text">Value: <%=data.token_value%></p>
-          <p class="card-text">Quantity: <%=data.quantity%></p>
+          <p id="quantity" class="card-text">Quantity: <%=data.quantity%></p>
           <p class="card-text"><small><%=data.tags%></small></p>
           <p class="card-text"><small class="text-muted">Created on: <%=data.createdOn%></small></p>
           <%#  ********TODO Add img link into database of the item %>
@@ -69,8 +69,6 @@ $(document).ready(function() {
 
   // Represent each name-value pair as a property of an object
   let mydata = {};
-  mydata.foo = "abc";
-  mydata.bar = 12345;
   // try using ejs locals data
   mydata.id = "<%=itemid%>";
 
@@ -88,6 +86,10 @@ $(document).ready(function() {
           if(result.update!=false){
             $("#userBalance").text("Your balance is: "+result.update.balance);
             $("#success").modal();
+            // refresh the page after modal is hidden
+            $("#success").on('hidden.bs.modal',function(e){
+              location.reload();
+            })
           }else{
             // the update was not successful
             $("#error").modal();
