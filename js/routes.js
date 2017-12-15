@@ -14,8 +14,10 @@ let app = require('express').Router();
 
 let model = require('./model.js');
 
-let multer = require('multer');
-let csv = require('csv-express')
+let csv = require('csv-express');
+
+const fileUpload = require('express-fileupload');
+app.use(fileUpload());
 
 module.exports=app;
 
@@ -179,15 +181,22 @@ app.post('/update_item', urlencodedParser ,async(req, res)=>{
       let token_value = req.body.token_value;
       let description = req.body.description;
       let tags = req.body.tags;
-      let image = req.body.file;
-      multer({ dest: './uploads/'}).single('file');
+      let image;
 
-        //console.log(req.body); //form fields
-        /* example output:
-        { title: 'abc' }
-         */
-        console.log(req.body.file); //form files
+      console.log(req.body.image);
+      if (req.files.image == undefined){
+          image = req.body.image; 
+        }else{
+          // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
+          let sampleFile = req.files.image;
+          image = sampleFile.name;
+          // Use the mv() method to place the file somewhere on your server
+          sampleFile.mv('./public/'+sampleFile.name, function(err) {
+            if (err)
+              return res.status(500).send(err);
+          });
 
+        }
       if(id==""){
         let result = await model.addItem(title,description,image,token_value,quantity,tags);
         console.log("Added");

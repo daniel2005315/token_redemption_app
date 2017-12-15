@@ -74,7 +74,7 @@
                             </div>
                             <div class="block-content collapse in">
                                 <div class="span12">
-                                    <form action="/update_item" id="form_sample_1" class="form-horizontal" method="post">
+                                    <form action="/update_item" id="form_sample_1" class="form-horizontal" method="post" encType="multipart/form-data">
                                       <fieldset>
                                         <div class="alert alert-error hide">
                                         <button class="close" data-dismiss="alert"></button>
@@ -135,7 +135,7 @@
                                           <label class="control-label" for="fileInput">Image</label>
                                           <div class="controls">
                                             <img id="images" src="<%=data.image%>" alt="Image cap" class="img-circle">
-                                            <input class="input-file uniform_on" name="file" id="file" type="file">
+                                            <input class="input-file uniform_on" name="image" id="image" type="file" value="<%=data.image%>">
                                           </div>
                                         </div>
                                         <script>
@@ -196,10 +196,6 @@
         <script src="/backend/assets/scripts.js"></script>
         <script src="/backend/assets/DT_bootstrap.js"></script>
         <script>
-        jQuery(document).ready(function() {   
-           //FormValidation.init();
-        });
-        
 
         $(function() {
             $(".datepicker").datepicker();
