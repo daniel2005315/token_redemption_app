@@ -126,11 +126,16 @@ async function getItems(page, orderBy, order) {
 
 
 async function getItem(id) {
-  let _id = new mongoose.Types.ObjectId(id);
-  let result = await Item.
+  try{
+    let _id = new mongoose.Types.ObjectId(id);
+    let result = await Item.
     findOne( {_id: _id}). // only return item's value and quantity
     exec();
-  return result;
+    return result;
+  }catch(err){
+    console.log(err.name);
+    return false;
+  }
 }
 
 // update item quantity -1
@@ -208,6 +213,64 @@ function authenticate(username, password) {
   return (username === 'john' && password === '123');
 }
 
+async function getAllItems() {
+  try{
+    let condition = {}
+    let result = await Item.
+      find(condition). // only return item's value and quantity
+      exec();
+    return result;
+    }catch(err){
+    console.log(err);
+    return false;
+  }
+}
+
+async function addItem(title, description, image, token_value, quantity, tags){
+  let last_id;
+  Item.findOne({}, {}, { sort: { 'id' :-1 } }, function(err, post) {
+    console.log(post.id);
+    last_id = post.id
+  });
+  last_id++;
+  var item= new Item({
+    id: last_id,
+    title: title,
+    description: description,
+    image:image,
+    token_value:token_value,
+    quantity:quantity,
+    tags:tags
+  });
+
+  try{
+    let result = await item.save();
+    console.log(result);
+    return result;
+  }catch(err){
+    console.log(err);
+    return false;
+  }
+}
+
+async function updateItem(id, title, description, image, token_value, quantity, tags){
+  try{
+    let result = await Item.findOneAndUpdate({_id:id},{$set:{
+      title: title,
+      description: description,
+      image:image,
+      token_value:token_value,
+      quantity:quantity,
+      tags:tags
+    }}).exec();
+    console.log(result);
+    return result;
+  }catch(err){
+    console.log(err);
+    return false;
+  }
+}
+
 module.exports = {
   User: User,
   Item: Item,
@@ -216,5 +279,8 @@ module.exports = {
   getItems: getItems,
   getItem: getItem,
   getInfo: getInfo,
-  redeemItem: redeemItem
+  redeemItem: redeemItem,
+  getAllItems: getAllItems,
+  updateItem:updateItem,
+  addItem:addItem
 }

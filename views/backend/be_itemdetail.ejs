@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html class="no-js">
+    
+    <head>
+        <title>CSCI2720 Project</title>
+        <link href="/backend/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="/backend/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+        <link href="/backend/assets/styles.css" rel="stylesheet" media="screen">
+        <link href="/backend/assets/DT_bootstrap.css" rel="stylesheet" media="screen">
+         <!--/.fluid-container-->
+        <link href="/backend/vendors/datepicker.css" rel="stylesheet" media="screen">
+        <link href="/backend/vendors/uniform.default.css" rel="stylesheet" media="screen">
+        <link href="/backend/vendors/chosen.min.css" rel="stylesheet" media="screen">
+
+        <link href="/backend/vendors/wysiwyg/bootstrap-wysihtml5.css" rel="stylesheet" media="screen">
+        <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="vendors/flot/excanvas.min.js"></script><![endif]-->
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <script src="/backend/vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+        <script src="/backend/vendors/jquery-1.9.1.js"></script>
+    </head>
+    
+    <body>
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="#">Admin Panel</a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav pull-right">
+                            <li class="dropdown">
+                                <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"> <i class="icon-user"></i>Mark<i class="caret"></i>
+
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a tabindex="-1" href="login.html">Logout</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <ul class="nav">
+                            <li class="active">
+                                <a href="#">Dashboard</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--/.nav-collapse -->
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span3" id="sidebar">
+                    <ul class="nav nav-list bs-docs-sidenav nav-collapse collapse">
+                        <li class="active">
+                            <a href="/be_listitem"><i class="icon-chevron-right"></i> Item</a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!--/span-->
+                 <div class="span9" id="content">
+                 <div class="row-fluid">
+                        <!-- block -->
+                      <div class="block">
+                            <div class="navbar navbar-inner block-header">
+                                <div class="muted pull-left">Items</div>
+                            </div>
+                            <div class="block-content collapse in">
+                                <div class="span12">
+                                    <form action="/update_item" id="form_sample_1" class="form-horizontal" method="post" encType="multipart/form-data">
+                                      <fieldset>
+                                        <div class="alert alert-error hide">
+                                        <button class="close" data-dismiss="alert"></button>
+                                        You have some form errors. Please check below.
+                                      </div>
+                                      <div class="alert alert-success hide">
+                                        <button class="close" data-dismiss="alert"></button>
+                                        Your form validation is successful!
+                                      </div>
+                                        <legend>Edit Item</legend>
+                                        <input type="hidden" name="_id" value="<%=data._id%>">
+                                        <div class="control-group">
+                                          <label class="control-label">Title<span class="required">*</span></label>
+                                          <div class="controls">
+                                            <input type="text" name="title" data-required="1" class="span6 m-wrap" value="<%=data.title%>"/>
+                                          </div>
+                                        </div>
+                                        <div class="control-group">
+                                          <label class="control-label">Quanitity<span class="required">*</span></label>
+                                          <div class="controls">
+                                            <input name="quantity" type="text" class="span6 m-wrap" value="<%=data.quantity%>"/>
+                                          </div>
+                                        </div>
+                                        <div class="control-group">
+                                          <label class="control-label">Token Value<span class="required">*</span></label>
+                                          <div class="controls">
+                                            <input name="token_value" type="text" class="span6 m-wrap" value="<%=data.token_value%>"/>
+                                          </div>
+                                        </div>
+                                        <div class="control-group">
+                                          <label class="control-label" for="multiSelect">Tags</label>
+                                          <div class="controls">
+                                            <select id="tags" name="tags" multiple="multiple" id="multiSelect" class="chzn-select span4">
+                                             <option value='yummy'>yummy</option>
+                                             <option value='delicious'>delicious</option>
+                                             <option value='yuk'>yuk</option>
+                                             <option value='pretty'>pretty</option>
+                                             <option value='funny'>funny</option>
+                                             <option value='pricy'>pricy</option>
+                                             <option value='meh'>meh</option>
+                                             <option value='interesting'>interesting</option>
+                                             <option value='omg'>omg</option>
+                                             <option value='bravo'>bravo</option>
+                                            </select>
+                                          </div>
+                                        </div>
+                                        <input id=default_tags type="hidden" value="<%=data.tags%>"/>
+                                         <script>
+                                          $(document).ready(function(){ 
+                                            let tags = $("#default_tags").val().split(",");
+                                            //console.log(tags);
+                                            $.each(tags, function(i,e){
+                                              $("form select[name=tags] option[value='" + e + "']").attr("selected", "selected");
+                                            });
+                                          });
+                                        </script>
+                                        <div class="control-group">
+                                          <label class="control-label" for="fileInput">Image</label>
+                                          <div class="controls">
+                                            <img id="images" src="<%=data.image%>" alt="Image cap" class="img-circle">
+                                            <input class="input-file uniform_on" name="image" id="image" type="file" value="<%=data.image%>">
+                                            <input name="default_image" id="default_image" type="hidden" value="<%=data.image%>">
+                                          </div>
+                                        </div>
+                                        <script>
+                                          function readURL(input) {
+                                              if (input.files && input.files[0]) {
+                                                var reader = new FileReader();
+
+                                                reader.onload = function(e) {
+                                                  $('#images').attr('src', e.target.result);
+                                                }
+                                                reader.readAsDataURL(input.files[0]);
+                                              }
+                                            }
+
+                                            $("#file").change(function() {
+                                              readURL(this);
+                                            });
+                                        </script>
+                                        <div class="control-group">
+                                          <label class="control-label" for="textarea2">Description</label>
+                                          <div class="controls">
+                                            <textarea name="description" class="input-xlarge textarea" placeholder="Enter text ..." style="width: 810px; height: 200px"><%=data.description%></textarea>
+                                          </div>
+                                        </div>
+                                        <div class="form-actions">
+                                          <button type="submit" class="btn btn-primary">Save changes</button>
+                                          <button type="reset" class="btn">Cancel</button>
+                                        </div>
+                                      </fieldset>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>  
+                        <!-- /block -->
+                    </div>
+
+            <footer>
+            </footer>
+        </div>
+        <!--/.fluid-container-->
+
+        <script src="/backend/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/backend/vendors/datatables/js/jquery.dataTables.min.js"></script>
+        <script src="/backend/vendors/jquery.uniform.min.js"></script>
+        <script src="/backend/vendors/chosen.jquery.min.js"></script>
+        <script src="/backend/vendors/bootstrap-datepicker.js"></script>
+
+        <script src="/backend/vendors/wysiwyg/wysihtml5-0.3.0.js"></script>
+        <script src="/backend/vendors/wysiwyg/bootstrap-wysihtml5.js"></script>
+
+        <script src="/backend/vendors/wizard/jquery.bootstrap.wizard.min.js"></script>
+
+        <script type="text/javascript" src="/backend/vendors/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="/backend/assets/form-validation.js"></script>
+
+
+        <script src="/backend/assets/scripts.js"></script>
+        <script src="/backend/assets/DT_bootstrap.js"></script>
+        <script>
+
+        $(function() {
+            $(".datepicker").datepicker();
+            $(".uniform_on").uniform();
+            $(".chzn-select").chosen();
+            $('.textarea').wysihtml5();
+
+            $('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
+                var $total = navigation.find('li').length;
+                var $current = index+1;
+                var $percent = ($current/$total) * 100;
+                $('#rootwizard').find('.bar').css({width:$percent+'%'});
+                // If it's the last tab then hide the last button and show the finish instead
+                if($current >= $total) {
+                    $('#rootwizard').find('.pager .next').hide();
+                    $('#rootwizard').find('.pager .finish').show();
+                    $('#rootwizard').find('.pager .finish').removeClass('disabled');
+                } else {
+                    $('#rootwizard').find('.pager .next').show();
+                    $('#rootwizard').find('.pager .finish').hide();
+                }
+            }});
+            $('#rootwizard .finish').click(function() {
+                alert('Finished!, Starting over!');
+                $('#rootwizard').find("a[href*='tab1']").trigger('click');
+            });
+        });
+        </script>
+    </body>
+</html>

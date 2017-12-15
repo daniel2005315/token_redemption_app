@@ -14,6 +14,11 @@ let app = require('express').Router();
 
 let model = require('./model.js');
 
+let csv = require('csv-express');
+
+const fileUpload = require('express-fileupload');
+app.use(fileUpload());
+
 module.exports=app;
 
 // Use a separate router for ajax request
@@ -46,6 +51,10 @@ app.get('/login', (req, res) => {
 
 //
 app.post('/login', urlencodedParser, async (req, res) => {
+  if(req.body.uname == "admin" && req.body.pword == "admin"){
+      res.redirect('/be_listitem');
+  }
+
   if (model.authenticate(req.body.uname, req.body.pword) === true) {
     // req.session.regenerate() is asynchronous but it does not return a promise.
     // In order to use await, the function call is then wrapped in a Promise object
@@ -64,7 +73,7 @@ app.post('/login', urlencodedParser, async (req, res) => {
     // Direct users to item list
     res.redirect('/listItems');
     // TODO: direct admin to admin panel
-  }
+    }
   else {
     req.session.destroy(()=>{});  // Safe asyncrhous call
     res.render('login.ejs',
@@ -132,7 +141,118 @@ app.get('/myitem', async (req, res)=>{
   let data = await model.getInfo(req.session.user);
   res.render('myitem.ejs',{ title: 'My Item', data: data});
 
-})
+});
+
+app.get('/be_listitem', async (req, res) => {
+  try {
+    let data = await model.getAllItems();
+    //console.log(data);
+    // Step 5: Render the view
+    res.render('./backend/be_itemlist.ejs', { title: 'Item Listing', data: data,Query: Query});
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error!');
+  }
+});
+
+app.get('/be_item', async (req, res) => {
+  try {
+    let itemId = req.query.id;
+    if(itemId != "null"){
+      //console.log(itemId);
+      let data = await model.getItem(itemId);
+      // Data can be null if not found
+      res.render('./backend/be_itemdetail.ejs', { title: 'Item', data: data, Query: Query });
+    }else{
+      let data = "";
+      res.render('./backend/be_itemdetail.ejs',{title: 'Item',data : data});
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error!');
+  }
+
+});
+
+app.post('/update_item', urlencodedParser ,async(req, res)=>{
+  try {
+      let id = req.body._id;
+      let title = req.body.title;
+      let quantity = req.body.quantity;
+      let token_value = req.body.token_value;
+      let description = req.body.description;
+      let tags = req.body.tags;
+      let image;
+
+      console.log(req.body.image);
+      if (req.files.image == undefined){
+          image = req.body.default_image; 
+        }else{
+          // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
+          let sampleFile = req.files.image;
+          image = sampleFile.name;
+          // Use the mv() method to place the file somewhere on your server
+          sampleFile.mv('./public/'+sampleFile.name, function(err) {
+            if (err)
+              return res.status(500).send(err);
+          });
+
+        }
+      if(id==""){
+        let result = await model.addItem(title,description,image,token_value,quantity,tags);
+        console.log("Added");
+      }else{
+        let result = await model.updateItem(id,title,description,image,token_value,quantity,tags);
+        console.log("Updated");
+        //res.send("Not yet implemented.");  // Place holder
+    }
+    res.redirect('/be_listitem');
+  }catch (err){
+    console.error(err);
+    res.status(500).send('Error!');
+  }
+});
+
+app.get('/remove_item' ,async(req, res)=>{
+  try {
+      let id = req.query.id;
+      let result = await model.Item.remove({ _id: id }, function(err) {
+        if(err){
+           console.log(err);
+           res.sendStatus(500);
+         }
+      });
+      res.redirect('/be_listitem');
+     }catch (err){
+    console.error(err);
+    res.status(500).send('Error!');
+  }
+});
+
+app.get('/itemExportCSV' ,function(req, res){
+
+    var filename   = "redeem.csv";
+
+    var dataArray;
+
+    model.Record.find({itemId:req.query.id},"username title token_value createdOn").lean().exec({}, function(err, item) {
+
+        if (err) res.send(err);
+        
+        res.statusCode = 200;
+
+        res.setHeader('Content-Type', 'text/csv');
+
+        res.setHeader("Content-Disposition", 'attachment; filename='+filename);
+
+        res.csv(item, true);
+
+    });
+    //res.redirect('/be_listitem');
+});
+
+
+
 
 
 
