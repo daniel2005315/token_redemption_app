@@ -74,7 +74,11 @@
                             </div>
                             <div class="block-content collapse in">
                                 <div class="span12">
+<<<<<<< HEAD
                                     <form action="/update_item" id="form_sample_1" class="form-horizontal" method="post" encType="multipart/form-data">
+=======
+                                    <form action="/update_item" name="itemform" id="form_sample_1" class="form-horizontal" method="post" encType="multipart/form-data">
+>>>>>>> origin/master
                                       <fieldset>
                                         <div class="alert alert-error hide">
                                         <button class="close" data-dismiss="alert"></button>
@@ -95,13 +99,21 @@
                                         <div class="control-group">
                                           <label class="control-label">Quanitity<span class="required">*</span></label>
                                           <div class="controls">
+<<<<<<< HEAD
                                             <input name="quantity" type="text" class="span6 m-wrap" value="<%=data.quantity%>"/>
+=======
+                                            <input name="quantity" type="number" class="span6 m-wrap" value="<%=data.quantity%>"/>
+>>>>>>> origin/master
                                           </div>
                                         </div>
                                         <div class="control-group">
                                           <label class="control-label">Token Value<span class="required">*</span></label>
                                           <div class="controls">
+<<<<<<< HEAD
                                             <input name="token_value" type="text" class="span6 m-wrap" value="<%=data.token_value%>"/>
+=======
+                                            <input name="token_value" type="number" class="span6 m-wrap" value="<%=data.token_value%>"/>
+>>>>>>> origin/master
                                           </div>
                                         </div>
                                         <div class="control-group">
@@ -151,7 +163,11 @@
                                               }
                                             }
 
+<<<<<<< HEAD
                                             $("#file").change(function() {
+=======
+                                            $("#image").change(function() {
+>>>>>>> origin/master
                                               readURL(this);
                                             });
                                         </script>
@@ -197,6 +213,48 @@
         <script src="/backend/assets/scripts.js"></script>
         <script src="/backend/assets/DT_bootstrap.js"></script>
         <script>
+<<<<<<< HEAD
+=======
+          // Wait for the DOM to be ready
+        $(function() {
+          // Initialize form validation on the registration form.
+          // It has the name attribute "registration"
+          $("form[name='itemform']").validate({
+            // Specify validation rules
+            rules: {
+              // The key name on the left side is the name attribute
+              // of an input field. Validation rules are defined
+              // on the right side
+              title: "required",
+              quantity: {
+                required: true,
+                digits: true
+              },
+              token_value: {
+                required: true,
+                digits: true
+              }
+            },
+            // Specify validation error messages
+            messages: {
+              title: "Please enter title",
+              quantity: {
+                required: "Please enter quantity!",
+                digits: "Please enter a number"
+              },
+              token_value: {
+                required: "Please enter token_value!",
+                digits: "Please enter a number"
+              },
+            },
+            // Make sure the form is submitted to the destination defined
+            // in the "action" attribute of the form when valid
+            submitHandler: function(form) {
+              form.submit();
+            }
+          });
+        });
+>>>>>>> origin/master
 
         $(function() {
             $(".datepicker").datepicker();
