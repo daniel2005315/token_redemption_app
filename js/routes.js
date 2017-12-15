@@ -254,6 +254,28 @@ app.get('/itemExportCSV' ,function(req, res){
     //res.redirect('/be_listitem');
 });
 
+app.get('/ExportCSV' ,function(req, res){
+
+    var filename   = "All_redeem.csv";
+
+    var dataArray;
+
+    model.Record.find({},"username title token_value createdOn").lean().exec({}, function(err, item) {
+
+        if (err) res.send(err);
+
+        res.statusCode = 200;
+
+        res.setHeader('Content-Type', 'text/csv');
+
+        res.setHeader("Content-Disposition", 'attachment; filename='+filename);
+
+        res.csv(item, true);
+
+    });
+    //res.redirect('/be_listitem');
+});
+
 
 
 
