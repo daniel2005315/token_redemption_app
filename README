@@ -1,0 +1,20 @@
+Group Members
+LEUNG CHUN KIT (1155047572)
+NG Ho Yin (1155073002)
+
+▪ Assumption
+- No registration is needed in this system
+- There is only 1 hard coded admin account
+- Users are authenticated according to the database
+- No restriction on item id format
+- Image of items can be irrelevant 
+
+▪ Setup
+- Turn on mongoDB, set it up with proper path
+- Navigate to the project root, run "npm install"
+- Run "node initdb.js" to populate the database
+- Run "node server"
+- Go to "localhost:8081"
+
+▪ List of features that are not implemented in the app
+= Registration
