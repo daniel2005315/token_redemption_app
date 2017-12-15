@@ -228,19 +228,19 @@ async function getAllItems() {
 }
 
 async function addItem(title, description, image, token_value, quantity, tags){
-<<<<<<< HEAD
-  let last_id;
-  Item.findOne({}, {}, { sort: { 'id' :-1 } }, function(err, post) {
-    console.log(post.id);
-    last_id = post.id
-  });
-  last_id++;
-  var item= new Item({
-    id: last_id,
-=======
+//<<<<<<< HEAD
+//  let last_id;
+//  Item.findOne({}, {}, { sort: { 'id' :-1 } }, function(err, post) {
+//    console.log(post.id);
+//    last_id = post.id
+//  });
+//  last_id++;
+//  var item= new Item({
+//    id: last_id,
+//=======
   var item= new Item({
     id: ++id_count,
->>>>>>> origin/master
+//>>>>>>> origin/master
     title: title,
     description: description,
     image:image,

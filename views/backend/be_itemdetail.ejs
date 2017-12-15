@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html class="no-js">
-    
+
     <head>
         <title>CSCI2720 Project</title>
         <link href="/backend/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -21,7 +21,7 @@
         <script src="/backend/vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
         <script src="/backend/vendors/jquery-1.9.1.js"></script>
     </head>
-    
+
     <body>
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
@@ -63,7 +63,7 @@
                         </li>
                     </ul>
                 </div>
-                
+
                 <!--/span-->
                  <div class="span9" id="content">
                  <div class="row-fluid">
@@ -74,11 +74,8 @@
                             </div>
                             <div class="block-content collapse in">
                                 <div class="span12">
-<<<<<<< HEAD
-                                    <form action="/update_item" id="form_sample_1" class="form-horizontal" method="post" encType="multipart/form-data">
-=======
                                     <form action="/update_item" name="itemform" id="form_sample_1" class="form-horizontal" method="post" encType="multipart/form-data">
->>>>>>> origin/master
+
                                       <fieldset>
                                         <div class="alert alert-error hide">
                                         <button class="close" data-dismiss="alert"></button>
@@ -99,21 +96,13 @@
                                         <div class="control-group">
                                           <label class="control-label">Quanitity<span class="required">*</span></label>
                                           <div class="controls">
-<<<<<<< HEAD
-                                            <input name="quantity" type="text" class="span6 m-wrap" value="<%=data.quantity%>"/>
-=======
                                             <input name="quantity" type="number" class="span6 m-wrap" value="<%=data.quantity%>"/>
->>>>>>> origin/master
                                           </div>
                                         </div>
                                         <div class="control-group">
                                           <label class="control-label">Token Value<span class="required">*</span></label>
                                           <div class="controls">
-<<<<<<< HEAD
-                                            <input name="token_value" type="text" class="span6 m-wrap" value="<%=data.token_value%>"/>
-=======
                                             <input name="token_value" type="number" class="span6 m-wrap" value="<%=data.token_value%>"/>
->>>>>>> origin/master
                                           </div>
                                         </div>
                                         <div class="control-group">
@@ -135,7 +124,7 @@
                                         </div>
                                         <input id=default_tags type="hidden" value="<%=data.tags%>"/>
                                          <script>
-                                          $(document).ready(function(){ 
+                                          $(document).ready(function(){
                                             let tags = $("#default_tags").val().split(",");
                                             //console.log(tags);
                                             $.each(tags, function(i,e){
@@ -163,11 +152,7 @@
                                               }
                                             }
 
-<<<<<<< HEAD
-                                            $("#file").change(function() {
-=======
                                             $("#image").change(function() {
->>>>>>> origin/master
                                               readURL(this);
                                             });
                                         </script>
@@ -186,7 +171,7 @@
 
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                         <!-- /block -->
                     </div>
 
@@ -213,8 +198,6 @@
         <script src="/backend/assets/scripts.js"></script>
         <script src="/backend/assets/DT_bootstrap.js"></script>
         <script>
-<<<<<<< HEAD
-=======
           // Wait for the DOM to be ready
         $(function() {
           // Initialize form validation on the registration form.
@@ -254,7 +237,6 @@
             }
           });
         });
->>>>>>> origin/master
 
         $(function() {
             $(".datepicker").datepicker();
