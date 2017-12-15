@@ -14,6 +14,8 @@ let app = require('express').Router();
 
 let model = require('./model.js');
 
+let multer = require('multer');
+
 module.exports=app;
 
 // Use a separate router for ajax request
@@ -46,6 +48,10 @@ app.get('/login', (req, res) => {
 
 //
 app.post('/login', urlencodedParser, async (req, res) => {
+  if(req.body.uname == "admin" && req.body.pword == "admin"){
+      res.redirect('/be_listitem');
+  }
+  
   if (model.authenticate(req.body.uname, req.body.pword) === true) {
     // req.session.regenerate() is asynchronous but it does not return a promise.
     // In order to use await, the function call is then wrapped in a Promise object
@@ -64,7 +70,7 @@ app.post('/login', urlencodedParser, async (req, res) => {
     // Direct users to item list
     res.redirect('/listItems');
     // TODO: direct admin to admin panel
-  }
+    }
   else {
     req.session.destroy(()=>{});  // Safe asyncrhous call
     res.render('login.ejs',
@@ -166,21 +172,53 @@ app.get('/be_item', async (req, res) => {
 
 app.post('/update_item', urlencodedParser ,async(req, res)=>{
   try {
-    let id = req.body._id;
-    let title = req.body.title;
-    let quantity = req.body.quantity;
-    let token_value = req.body.token_value;
-    let description = req.body.description;
+      let id = req.body._id;
+      let title = req.body.title;
+      let quantity = req.body.quantity;
+      let token_value = req.body.token_value;
+      let description = req.body.description;
+      let tags = req.body.tags;
+      let image = req.body.file;
+      multer({ dest: './uploads/'}).single('file');
 
-    let data = await model.getItem(id);
-    
-    //res.send("Not yet implemented.");  // Place holder
+        //console.log(req.body); //form fields
+        /* example output:
+        { title: 'abc' }
+         */
+        console.log(req.body.file); //form files
+
+      if(id==""){
+        let result = await model.addItem(title,description,image,token_value,quantity,tags);
+        console.log("Added");
+      }else{
+        let result = await model.updateItem(id,title,description,image,token_value,quantity,tags);
+        console.log("Updated");
+        //res.send("Not yet implemented.");  // Place holder
+    }
     res.redirect('/be_listitem');
   }catch (err){
     console.error(err);
     res.status(500).send('Error!');
   }
 });
+
+app.get('/remove_item' ,async(req, res)=>{
+  try {
+      let id = req.query.id;
+      let result = await model.Item.remove({ _id: id }, function(err) {
+        if(err){
+           console.log(err);
+           res.sendStatus(500);
+         }
+      });
+      res.redirect('/be_listitem');
+     }catch (err){
+    console.error(err);
+    res.status(500).send('Error!');
+  }
+});
+
+
 
 
 

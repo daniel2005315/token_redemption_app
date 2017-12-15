@@ -58,9 +58,6 @@
             <div class="row-fluid">
                 <div class="span3" id="sidebar">
                     <ul class="nav nav-list bs-docs-sidenav nav-collapse collapse">
-                        <li>
-                            <a href="index.html"><i class="icon-chevron-right"></i> Dashboard</a>
-                        </li>
                         <li class="active">
                             <a href="/be_listitem"><i class="icon-chevron-right"></i> Item</a>
                         </li>
@@ -88,7 +85,7 @@
                                         Your form validation is successful!
                                       </div>
                                         <legend>Edit Item</legend>
-                                        <input type="hidden" name="_id" value="<%=data._id.toLocaleString()%>">
+                                        <input type="hidden" name="_id" value="<%=data._id%>">
                                         <div class="control-group">
                                           <label class="control-label">Title<span class="required">*</span></label>
                                           <div class="controls">
@@ -128,9 +125,9 @@
                                          <script>
                                           $(document).ready(function(){ 
                                             let tags = $("#default_tags").val().split(",");
-                                            console.log(tags);
+                                            //console.log(tags);
                                             $.each(tags, function(i,e){
-                                              $("#tags option[value='" + e + "']").prop("selected", true);
+                                              $("form select[name=tags] option[value='" + e + "']").attr("selected", "selected");
                                             });
                                           });
                                         </script>
@@ -138,7 +135,7 @@
                                           <label class="control-label" for="fileInput">Image</label>
                                           <div class="controls">
                                             <img id="images" src="<%=data.image%>" alt="Image cap" class="img-circle">
-                                            <input class="input-file uniform_on" id="fileInput" type="file">
+                                            <input class="input-file uniform_on" name="file" id="file" type="file">
                                           </div>
                                         </div>
                                         <script>
@@ -153,7 +150,7 @@
                                               }
                                             }
 
-                                            $("#fileInput").change(function() {
+                                            $("#file").change(function() {
                                               readURL(this);
                                             });
                                         </script>

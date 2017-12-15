@@ -223,9 +223,15 @@ async function getAllItems() {
   }
 }
 
-async function addItem(id, title, description, image, token_value, quantity, createdOn, tags){
-  console.log("**** Function called");
+async function addItem(title, description, image, token_value, quantity, tags){
+  let last_id;
+  Item.findOne({}, {}, { sort: { 'id' :-1 } }, function(err, post) {
+    console.log(post.id);
+    last_id = post.id
+  });
+  last_id++;
   var item= new Item({
+    id: last_id,
     title: title,
     description: description,
     image:image,
@@ -244,19 +250,16 @@ async function addItem(id, title, description, image, token_value, quantity, cre
   }
 }
 
-async function updateItems(id, title, description, image, token_value, quantity, createdOn, tags){
-  console.log("**** Function called");
-  var item= new Item({
-    title: title,
-    description: description,
-    image:image,
-    token_value:token_value,
-    quantity:quantity,
-    tags:tags
-  });
-
+async function updateItem(id, title, description, image, token_value, quantity, tags){
   try{
-    let result = await item.save();
+    let result = await Item.findOneAndUpdate({_id:id},{$set:{
+      title: title,
+      description: description,
+      image:image,
+      token_value:token_value,
+      quantity:quantity,
+      tags:tags
+    }}).exec();
     console.log(result);
     return result;
   }catch(err){
@@ -274,5 +277,7 @@ module.exports = {
   getItem: getItem,
   getInfo: getInfo,
   redeemItem: redeemItem,
-  getAllItems: getAllItems
+  getAllItems: getAllItems,
+  updateItem:updateItem,
+  addItem:addItem
 }

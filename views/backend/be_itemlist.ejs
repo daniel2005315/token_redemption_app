@@ -5,9 +5,6 @@
             <div class="row-fluid">
                 <div class="span3" id="sidebar">
                     <ul class="nav nav-list bs-docs-sidenav nav-collapse collapse">
-                        <li>
-                            <a href="index.html"><i class="icon-chevron-right"></i> Dashboard</a>
-                        </li>
                         <li class="active">
                             <a href="/be_listitem"><i class="icon-chevron-right"></i> Item</a>
                         </li>
@@ -54,10 +51,10 @@
                                                 let endcoded_id = Query.stringify({id: item._id});
                                                  %>    
                                                 <tr class="gradeU">
-                                                    <td><a href=/be_item?<%=endcoded_id%>><button class="btn btn-primary"><i class="icon-edit icon-white"></i></button></a><button class="btn btn-danger"><i class="icon-remove icon-white"></i></button></td>
+                                                    <td><a href=/be_item?<%=endcoded_id%>><button class="btn btn-primary"><i class="icon-edit icon-white"></i></button></a> <a href=/remove_item?<%=endcoded_id%>> <button class="btn btn-danger"><i class="icon-remove icon-white"></i></button></a></td>
                                                     <td><%=item.title%></td>
                                                     <td><%=item.description%></td>
-                                                    <td><%=item.tag%></td>
+                                                    <td><%=item.tags%></td>
                                                     <td class="center"><%=item.quantity%></td>
                                                     <td class="center"><%=item.token_value%></td>
                                                 </tr>
