@@ -105,12 +105,7 @@ app.get('/listItems', async (req, res) => {
     let page = req.query.page-0;       // Convert to number
     let orderBy = req.query.orderBy-0; // Convert to number
     let order = req.query.order-0;     // Convert to number
-
-    // Step 2 (TODO): Validate input and check if the user
-    // has the right to proceed.
-
-    // Step 3: Apply "business logic", and
-    // Step 4: Prepare the data needed by the view
+    
     let pageData = await model.getItems(page, orderBy, order);
     console.log(pageData);
     console.log(Query);

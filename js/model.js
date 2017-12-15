@@ -2,8 +2,9 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-//let ObjectId = Schema.Types.ObjectId;
-
+// add html type
+require('mongoose-html').loadType(mongoose);
+var Html = mongoose.Types.Html;
 /*
 username: username,
 password: password,
@@ -30,8 +31,11 @@ var UserSchema = Schema({
 var ItemSchema = Schema({
   id: { type: String, required:true, unique:true },
   title: {type: String, required:true, unique:true},
-  description: { type: String, default: '' },
-  // TODO: include image for each item?
+  description: { type: Html,
+    setting: {
+      allowedTags: ['p', 'b', 'i', 'u', 'strong', 'pre', 'br']
+    }
+  },
   image:{type: String, default: ''},
   token_value:{type: Number, min: 1},
   quantity:{type:Number, min:0},

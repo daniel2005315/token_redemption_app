@@ -16,7 +16,7 @@
         <div class="card-block">
           <h5 class="card-title mt-4"><%=data.title%></h5>
           <p class="card-text"><small class="text-muted">Item id: <%=data._id%></small></p>
-          <p class="card-text"><%=data.description%></p>
+          <p class="card-text"><%-data.description%></p>
           <p class="card-text">Value: <%=data.token_value%></p>
           <p id="quantity" class="card-text">Quantity: <%=data.quantity%></p>
           <p class="card-text"><small><%=data.tags%></small></p>
