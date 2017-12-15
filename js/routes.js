@@ -185,7 +185,7 @@ app.post('/update_item', urlencodedParser ,async(req, res)=>{
 
       console.log(req.body.image);
       if (req.files.image == undefined){
-          image = req.body.image; 
+          image = req.body.default_image; 
         }else{
           // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
           let sampleFile = req.files.image;
