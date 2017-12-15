@@ -183,7 +183,6 @@ app.post('/update_item', urlencodedParser ,async(req, res)=>{
       let tags = req.body.tags;
       let image;
 
-      console.log(req.body.image);
       if (req.files.image == undefined){
           image = req.body.default_image; 
         }else{

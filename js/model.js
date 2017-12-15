@@ -52,6 +52,7 @@ var User = mongoose.model('User', UserSchema);
 var Item = mongoose.model('Item', ItemSchema);
 var Record = mongoose.model('Record', RecordSchema);
 
+var id_count = 20;
 
 class PaginationData {
   constructor (props) {
@@ -224,14 +225,8 @@ async function getAllItems() {
 }
 
 async function addItem(title, description, image, token_value, quantity, tags){
-  let last_id;
-  Item.findOne({}, {}, { sort: { 'id' :-1 } }, function(err, post) {
-    console.log(post.id);
-    last_id = post.id
-  });
-  last_id++;
   var item= new Item({
-    id: last_id,
+    id: ++id_count,
     title: title,
     description: description,
     image:image,
