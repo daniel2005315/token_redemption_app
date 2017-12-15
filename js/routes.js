@@ -15,6 +15,7 @@ let app = require('express').Router();
 let model = require('./model.js');
 
 let multer = require('multer');
+let csv = require('csv-express')
 
 module.exports=app;
 
@@ -51,7 +52,7 @@ app.post('/login', urlencodedParser, async (req, res) => {
   if(req.body.uname == "admin" && req.body.pword == "admin"){
       res.redirect('/be_listitem');
   }
-  
+
   if (model.authenticate(req.body.uname, req.body.pword) === true) {
     // req.session.regenerate() is asynchronous but it does not return a promise.
     // In order to use await, the function call is then wrapped in a Promise object
@@ -217,6 +218,29 @@ app.get('/remove_item' ,async(req, res)=>{
     res.status(500).send('Error!');
   }
 });
+
+app.get('/itemExportCSV' ,function(req, res){
+
+    var filename   = "redeem.csv";
+
+    var dataArray;
+
+    model.Record.find({itemId:req.query.id},"username title token_value createdOn").lean().exec({}, function(err, item) {
+
+        if (err) res.send(err);
+        
+        res.statusCode = 200;
+
+        res.setHeader('Content-Type', 'text/csv');
+
+        res.setHeader("Content-Disposition", 'attachment; filename='+filename);
+
+        res.csv(item, true);
+
+    });
+    //res.redirect('/be_listitem');
+});
+
 
 
 
